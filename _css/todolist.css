@@ -1,0 +1,52 @@
+#navbar {
+    background-color: #faf2ff;
+    box-shadow: 0 4px 4px -4px rgba(0,0,0,.5);
+    margin-bottom: 15px;
+}
+
+#navbarSpacer {
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
+    display: flex;
+}
+
+header, main {
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+#tagList {
+    display: flex;
+    align-items: left;
+}
+
+.tag {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 2px;
+    font-size: small;
+}
+
+/* dialog */
+dialog {
+    position: absolute;
+    top: 20%;
+    z-index: 2;
+    display: none;
+}
+
+.screenOverlay::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(247, 247, 247, 0.7);
+    z-index: 1;
+}
+/* /dialog */

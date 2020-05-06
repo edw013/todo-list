@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>TODO List</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <link rel="stylesheet" href="_css/todolist.css" />
+    <script src="_js/linkedlist.js"></script>
+    <script src="_js/todolist.js"></script>
+</head>
+<body>
+    <!-- navbar -->
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-light" sticky="top">
+        <div id="navbarSpacer">
+            <a class="navbar-brand" href="#">ew.</a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarLinks" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div id="navbarLinks" class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">todo <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">resume</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- end navbar -->
+
+    <!-- header -->
+    <header>
+        <h1>TODO List</h1>
+    </header>
+    <!-- end header -->
+
+    <!-- todo list -->
+    <main>
+        <ul id="list">
+            <!-- using sortable, we can get the newIndex and get the ids by looking around -->
+        </ul>
+        <button type="button" id="addItemButton" class="btn btn-primary" data-toggle="modal" data-target="#itemDialog">Add New Item</button>
+    </main>
+    <!-- end todo list -->
+
+    <!-- item form modal -->
+    <div class="modal fade" id="itemDialog" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="itemDialogTitle"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="itemForm" method="POST">
+                        <div class="form-group">
+                            <label for="itemName">Name: </label>
+                            <input type="text" id="itemName" class="form-control" name="item" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="itemDesc">Description: </label>
+                            <textarea type="textarea" id="itemDesc" class="form-control" name="desc" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemTags">Tags: </label>
+                            <!-- pseudo input field here that modifies the below hidden field -->
+                            <input type="text" id="itemTagsFake" class="form-control" />
+                            <button type="button" id="addTagButton" class="btn btn-info">Add</button>
+                            <input type="text" id="itemTags" name="tags" hidden />
+                        </div>
+                        <div id="tagList"></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="itemDialogCancelButton" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="itemDialogConfirmButton" class="btn btn-primary"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end item form modal -->
+
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            const itemList = new LinkedList();
+
+            const list = document.getElementById("list");
+            Sortable.create(list, {
+                handle: ".handle",
+                animation: 150,
+                ghostClass: "blue-background-class"
+            });   
+
+            document.getElementById("addItemButton").addEventListener("click", () => {
+                addItemDialog(itemList);
+            });
+
+            const dialogEl = document.getElementById("itemDialog");
+            document.getElementById("itemDialogCancelButton").addEventListener("click", () => {
+                resetItemForm();
+            });
+
+            document.getElementById("itemTagsFake").addEventListener("keyup", event => {
+                if (event.keyCode == 13) {
+                    addTags();
+                }
+            });
+
+            document.getElementById("addTagButton").addEventListener("click", () => {
+                addTags();
+            });
+
+            //itemList.getFromStorage();
+            populateList(itemList.head);
+        });
+    </script>
+</body>
+</html>
