@@ -51,9 +51,17 @@
 
     <!-- todo list -->
     <main>
-        <ul id="list">
-            <!-- using sortable, we can get the newIndex and get the ids by looking around -->
-        </ul>
+        <div class="row">
+            <div class="col-4">
+                <div class="list-group" id="listNames" role="tablist">
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="tab-content" id="listDescs">
+                </div>
+            </div>
+        </div>
+
         <button type="button" id="addItemButton" class="btn btn-primary" data-toggle="modal" data-target="#itemDialog">Add New Item</button>
     </main>
     <!-- end todo list -->
@@ -102,8 +110,7 @@
             const itemList = new LinkedList();
 
             const list = document.getElementById("list");
-            Sortable.create(list, {
-                handle: ".handle",
+            Sortable.create(listNames, {
                 animation: 150,
                 ghostClass: "blue-background-class"
             });   

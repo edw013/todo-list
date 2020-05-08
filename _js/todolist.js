@@ -36,16 +36,43 @@ const addItemSubmit = itemList => {
     const itemForm = document.getElementById("itemForm");
     const data = new FormData(itemForm);
 
-    const list = document.getElementById("list");
-    const lastNode = list.lastElementChild;
+    const listNames = document.getElementById("listNames");
+    const lastNode = listNames.lastElementChild;
     const prevNodeId = (lastNode == null) ? "" : lastNode.getAttribute("data-id");
     const node = new LinkedListNode("", data.get("item"), data.get("desc"), prevNodeId, "", data.get("tags"));
     itemList.addNode(node);
 
-    const nodeLi = document.createElement("li");
-    nodeLi.setAttribute("data-id", node.id);
-    nodeLi.innerHTML = node.name;
-    list.appendChild(nodeLi);
+    // change the currently active to inactive
+    const activeNodeNameEl = listNames.getElementsByClassName("list-group-item list-group-item-action active")[0];
+    if (activeNodeNameEl != undefined) {
+        activeNodeNameEl.setAttribute("class", "list-group-item list-group-item-action");
+    }
+
+    const nodeNameEl = document.createElement("a");
+    nodeNameEl.setAttribute("id", node.id + "-name");
+    nodeNameEl.setAttribute("class", "list-group-item list-group-item-action active");
+    nodeNameEl.setAttribute("data-toggle", "list");
+    nodeNameEl.setAttribute("href", "#" + node.id + "-desc");
+    nodeNameEl.setAttribute("role", "tab");
+    nodeNameEl.setAttribute("aria-controls", node.name);
+    nodeNameEl.setAttribute("data-id", node.id);
+    nodeNameEl.innerHTML = node.name;
+    listNames.appendChild(nodeNameEl);
+
+    const listDescs = document.getElementById("listDescs");
+    // change the currently active to inactive
+    const activeNodeDescEl = listDescs.getElementsByClassName("tab-pane fade show active")[0];
+    if (activeNodeNameEl != undefined) {
+        activeNodeDescEl.setAttribute("class", "tab-pane fade show");
+    }
+
+    const nodeDescEl = document.createElement("div");
+    nodeDescEl.setAttribute("class", "tab-pane fade show active");
+    nodeDescEl.setAttribute("id", node.id + "-desc");
+    nodeDescEl.setAttribute("role", "tabpanel");
+    nodeDescEl.setAttribute("aria-labelledby", node.id + "-name");
+    nodeDescEl.innerHTML = node.desc;
+    listDescs.appendChild(nodeDescEl);
 
     // alas we must use jquery
     $("#itemDialog").modal("hide");
